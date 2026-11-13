@@ -1,0 +1,179 @@
+# iPIXEL Wall – Pinball DMD attract mode
+# EN: Daily 08:00-20:00 rotation of GIFs, clock, weather, car range, news, work and music.
+#     Adapt entity names and file paths to your own setup (the texts are Dutch).
+# Dagelijks 08:00-20:00 een rotatie van GIF's, klok, weer, Elroq, NOS, werk en muziek.
+# Pas entiteitsnamen en bestandspaden aan je eigen installatie aan.
+#
+# Benodigd:
+#   - Folder-integratie met sensor.rotatie (pad /media/pinball_dmd/rotatie, patroon *.gif)
+#   - homeassistant.allowlist_external_dirs: [/media/pinball_dmd]
+#   - Helper input_text.ipixel_laatste_nos (tekst, max. 100 tekens)
+
+alias: iPIXEL Wall - Pinball DMD attract mode
+description: >-
+  Dagelijks 08:00-20:00: willekeurige GIFs uit de rotatiemap, afgewisseld met klok,
+  weer, Elroq-status, NOS-nieuws, werk en muziek
+mode: restart
+triggers:
+  - trigger: homeassistant
+    event: start
+    id: start
+  - trigger: time
+    at: "08:00:00"
+    id: start
+  - trigger: time
+    at: "20:00:00"
+    id: stop
+conditions: []
+actions:
+  # Om 20:00: wall zwart en stoppen
+  - if:
+      - condition: trigger
+        id: stop
+    then:
+      - action: media_player.media_stop
+        target:
+          entity_id: media_player.ipixel_wall_media
+      - stop: Buiten speeltijd
+  - condition: time
+    after: "08:00:00"
+    before: "20:00:00"
+
+  - repeat:
+      sequence:
+        # --- Willekeurige GIF uit de rotatiemap (nooit twee keer dezelfde achter elkaar)
+        - variables:
+            gifs: >-
+              {{ state_attr('sensor.rotatie', 'file_list') | default([], true)
+                 | select('search', '(?i)\.gif$') | list }}
+            gif: >-
+              {% set opties = gifs | reject('eq', vorige | default('')) | list %}
+              {{ (opties or gifs) | random if gifs else '' }}
+        - variables:
+            vorige: "{{ gif }}"
+        - if:
+            - condition: template
+              value_template: "{{ gif != '' }}"
+          then:
+            - action: media_player.play_media
+              target:
+                entity_id: media_player.ipixel_wall_media
+              data:
+                media_content_id: >-
+                  media-source://media_source/local/{{ gif | replace('/media/', '', 1) }}
+                media_content_type: image/gif
+              continue_on_error: true
+            # GIF's met _STORY_ in de naam krijgen 60 seconden, de rest 30
+            - delay:
+                seconds: "{{ 60 if '_STORY_' in (gif | upper) else 30 }}"
+
+        # --- Klok
+        - action: media_player.play_media
+          target:
+            entity_id: media_player.ipixel_wall_media
+          data:
+            media_content_id: clock
+            media_content_type: image/gif
+          continue_on_error: true
+        - delay: "00:00:10"
+
+        # --- Weer
+        - action: media_player.play_media
+          target:
+            entity_id: media_player.ipixel_wall_media
+          data:
+            media_content_id: weather.forecast_home_2
+            media_content_type: image/png
+          continue_on_error: true
+        - delay: "00:00:15"
+
+        # --- Actieradius van de auto (tot 17:00), over twee regels
+        - if:
+            - condition: time
+              before: "17:00:00"
+          then:
+            - action: text.set_value
+              target:
+                entity_id: text.ipixel_wall_display
+              data:
+                value: >
+                  {% set r = states('sensor.garage_skoda_050722_actieradius') -%}
+                  [vast]ELROQ|{{ r | int if is_number(r) else '--' }} km
+            - delay: "00:00:05"
+
+        # --- NOS: een nieuwe kop staat 15 minuten in de rotatie
+        - variables:
+            nos_titel: >-
+              {%- set e = state_attr('sensor.nos_algemeen', 'entries') or [] -%}
+              {{ ((e[0].title if e else '') | trim)[:100] }}
+        - if:
+            - condition: template
+              value_template: "{{ nos_titel != '' and nos_titel != states('input_text.ipixel_laatste_nos') }}"
+          then:
+            - action: input_text.set_value
+              target:
+                entity_id: input_text.ipixel_laatste_nos
+              data:
+                value: "{{ nos_titel }}"
+        - if:
+            - condition: template
+              value_template: >-
+                {{ nos_titel != '' and
+                   (now() - states.input_text.ipixel_laatste_nos.last_changed).total_seconds() < 900 }}
+          then:
+            - action: text.set_value
+              target:
+                entity_id: text.ipixel_wall_display
+              data:
+                value: >-
+                  [vast]{{ (nos_titel | wordwrap(15, true, '\n')).split('\n')[:2] | join('|') }}
+              continue_on_error: true
+            - delay: "00:00:10"
+
+        # --- Werkdagen 08:00-17:00: logo en team
+        - if:
+            - condition: time
+              after: "08:00:00"
+              before: "17:00:00"
+              weekday: [mon, tue, wed, thu, fri]
+          then:
+            - action: media_player.play_media
+              target:
+                entity_id: media_player.ipixel_wall_media
+              data:
+                media_content_id: "media-source://media_source/local/pinball_dmd/werk_logo.png"
+                media_content_type: image/png
+              continue_on_error: true
+            - delay: "00:00:15"
+            - action: text.set_value
+              target:
+                entity_id: text.ipixel_wall_display
+              data:
+                value: "[vast]Mijn team"
+            - delay: "00:00:15"
+
+        # --- Muziek als de thuiswerk-speaker speelt: logo, dan song en artiest
+        - if:
+            - condition: state
+              entity_id: media_player.thuiswerken
+              state: playing
+          then:
+            - action: media_player.play_media
+              target:
+                entity_id: media_player.ipixel_wall_media
+              data:
+                media_content_id: "media-source://media_source/local/pinball_dmd/q music non stop logo.png"
+                media_content_type: image/png
+              continue_on_error: true
+            - delay: "00:00:05"
+            - action: text.set_value
+              target:
+                entity_id: text.ipixel_wall_display
+              data:
+                value: >-
+                  [vast]{{ states('sensor.q_music_non_stop_song_1')[:15] }}|{{ states('sensor.q_music_non_stop_artist_1')[:15] }}
+            - delay: "00:00:05"
+      until:
+        - condition: time
+          after: "20:00:00"
+          before: "08:00:00"

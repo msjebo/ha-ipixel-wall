@@ -1,0 +1,39 @@
+# Dashboardkaarten voor de iPIXEL Wall
+# EN: Dashboard cards for the iPIXEL Wall (preview on 3 and 4 panels, controls, TV view).
+
+# 1. Voorbeeld van de wall op 3 én 4 panelen, met bediening
+type: vertical-stack
+cards:
+  - type: picture-entity
+    entity: camera.ipixel_wall_preview_3_panelen
+    camera_view: live
+    show_name: false
+    show_state: false
+  - type: picture-entity
+    entity: camera.ipixel_wall_preview_4_panelen
+    camera_view: live
+    show_name: false
+    show_state: false
+  - type: entities
+    entities:
+      - entity: text.ipixel_wall_display
+        name: Tekst
+      - entity: select.ipixel_wall_transition
+        name: Overgang
+      - entity: select.ipixel_wall_display_mode
+        name: Weergave
+      - entity: light.ipixel_wall_text_color
+        name: Tekstkleur
+
+# 2. Schermvullende weergave voor een tv of tablet
+#    (maak een nieuwe weergave aan en plak dit in de YAML-editor van die weergave)
+#
+# title: Wall
+# path: wall-tv
+# type: panel
+# cards:
+#   - type: picture-entity
+#     entity: camera.ipixel_wall_preview_tv
+#     camera_view: live
+#     show_name: false
+#     show_state: false

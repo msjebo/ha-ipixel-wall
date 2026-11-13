@@ -1,0 +1,62 @@
+# Script: iPIXEL Wall - GIF testen
+# EN: Script to test a GIF from the media browser; pauses and then resumes the rotation.
+# Kies een GIF of plaatje in de mediabrowser, toon het een tijdje en hervat daarna de rotatie.
+# Pas de entiteit van je rotatie-automatisering aan (3 plekken).
+
+alias: iPIXEL Wall - GIF testen
+icon: mdi:dots-grid
+mode: restart
+fields:
+  bestand:
+    name: GIF
+    description: Kies de GIF of afbeelding die je wilt testen
+    required: true
+    selector:
+      media:
+        accept:
+          - image/*
+  duur:
+    name: Testduur
+    default: 30
+    selector:
+      number:
+        min: 10
+        max: 300
+        unit_of_measurement: s
+  rotatie_hervatten:
+    name: Rotatie daarna hervatten
+    default: true
+    selector:
+      boolean: {}
+sequence:
+  - action: automation.turn_off
+    target:
+      entity_id: automation.ipixel_wall_pinball_dmd_statusrotatie
+    data:
+      stop_actions: true
+  - variables:
+      start: "{{ now().timestamp() }}"
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.ipixel_wall_media
+    data:
+      media_content_id: "{{ bestand.media_content_id }}"
+      media_content_type: "{{ bestand.media_content_type | default('image/gif') }}"
+  - action: persistent_notification.create
+    data:
+      title: iPIXEL Wall test
+      message: >
+        {{ bestand.media_content_id.split('/')[-1] }} geladen in
+        {{ (now().timestamp() - start) | round(1) }} s
+  - delay:
+      seconds: "{{ duur | int }}"
+  - if:
+      - condition: template
+        value_template: "{{ rotatie_hervatten }}"
+    then:
+      - action: automation.turn_on
+        target:
+          entity_id: automation.ipixel_wall_pinball_dmd_statusrotatie
+      - action: automation.trigger
+        target:
+          entity_id: automation.ipixel_wall_pinball_dmd_statusrotatie

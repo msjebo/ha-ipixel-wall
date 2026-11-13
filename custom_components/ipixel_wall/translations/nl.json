@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iPIXEL Wall",
+        "description": "Kies 3 of 4 iPIXEL-teksten in de fysieke volgorde van links naar rechts. Laat paneel 4 leeg voor een wall van 3 panelen.",
+        "data": {
+          "left_entity": "Paneel 1 (links)",
+          "middle_entity": "Paneel 2",
+          "right_entity": "Paneel 3",
+          "panel4_entity": "Paneel 4 (rechts, optioneel)"
+        }
+      }
+    },
+    "error": {
+      "duplicate_panel": "Kies elk paneel maar één keer.",
+      "invalid_panel": "Elke keuze moet een iPIXEL Color-tekstentiteit zijn."
+    },
+    "abort": {
+      "already_configured": "De iPIXEL Wall is al ingesteld."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "iPIXEL Wall – panelen",
+        "description": "Kies 3 of 4 iPIXEL-teksten in de fysieke volgorde van links naar rechts. Laat paneel 4 leeg voor een wall van 3 panelen.",
+        "data": {
+          "left_entity": "Paneel 1 (links)",
+          "middle_entity": "Paneel 2",
+          "right_entity": "Paneel 3",
+          "panel4_entity": "Paneel 4 (rechts, optioneel)"
+        }
+      }
+    },
+    "error": {
+      "duplicate_panel": "Kies elk paneel maar één keer.",
+      "invalid_panel": "Elke keuze moet een iPIXEL Color-tekstentiteit zijn."
+    }
+  }
+}

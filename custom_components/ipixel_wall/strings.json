@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iPIXEL Wall",
+        "description": "Select 3 or 4 iPIXEL text entities in physical left-to-right order. Leave panel 4 empty for a 3-panel wall.",
+        "data": {
+          "left_entity": "Panel 1 (left)",
+          "middle_entity": "Panel 2",
+          "right_entity": "Panel 3",
+          "panel4_entity": "Panel 4 (right, optional)"
+        }
+      }
+    },
+    "error": {
+      "duplicate_panel": "Select each panel only once.",
+      "invalid_panel": "Each selection must be an iPIXEL Color text display entity."
+    },
+    "abort": {
+      "already_configured": "The iPIXEL Wall is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "iPIXEL Wall – panels",
+        "description": "Select 3 or 4 iPIXEL text entities in physical left-to-right order. Leave panel 4 empty for a 3-panel wall.",
+        "data": {
+          "left_entity": "Panel 1 (left)",
+          "middle_entity": "Panel 2",
+          "right_entity": "Panel 3",
+          "panel4_entity": "Panel 4 (right, optional)"
+        }
+      }
+    },
+    "error": {
+      "duplicate_panel": "Select each panel only once.",
+      "invalid_panel": "Each selection must be an iPIXEL Color text display entity."
+    }
+  }
+}

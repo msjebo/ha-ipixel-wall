@@ -1,0 +1,14 @@
+{
+  "domain": "ipixel_wall",
+  "name": "iPIXEL Wall",
+  "after_dependencies": [
+    "ipixel_color"
+  ],
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/msjebo/ha-ipixel-wall",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/msjebo/ha-ipixel-wall/issues",
+  "requirements": [],
+  "version": "0.7.1"
+}
