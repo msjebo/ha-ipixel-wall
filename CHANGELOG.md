@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.3 (2026-11-17)
+- Faster streaming: frames are written in 244-byte chunks without a response per chunk (`STREAM_WRITE_MODE`), with automatic fallback per panel
+
 ## 0.7.2 (2026-11-17)
 - Battery glyph `🔋` in the DMD font
 

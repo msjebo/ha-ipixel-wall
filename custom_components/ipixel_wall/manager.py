@@ -329,12 +329,33 @@ def _build_stream_commands(frames, infos):
 
 
 async def _fast_write(api, commands) -> None:
-    """Write without the notify/response dance of send_command."""
+    """Write without the notify/response dance of send_command.
+
+    STREAM_WRITE_MODE (const.py):
+      "chunked_noack" – 244-byte chunks without a GATT response per chunk (fastest)
+      "chunked"       – 244-byte chunks with a response per chunk (as pypixelcolor does)
+      "single"        – one long write per command (the original behaviour)
+    A panel that fails in "chunked_noack" falls back to "chunked" automatically.
+    """
     if not api.is_connected:
         await api.connect()
     client = api._bluetooth._client
-    for cmd in commands:
-        await client.write_gatt_char(_bt_client.WRITE_UUID, cmd)
+    mode = getattr(api, "_wall_write_mode", None) or getattr(_const, "STREAM_WRITE_MODE", "chunked_noack")
+    if mode == "single":
+        for cmd in commands:
+            await client.write_gatt_char(_bt_client.WRITE_UUID, cmd)
+        return
+    try:
+        for cmd in commands:
+            for pos in range(0, len(cmd), 244):
+                await client.write_gatt_char(
+                    _bt_client.WRITE_UUID, cmd[pos:pos + 244], response=(mode != "chunked_noack")
+                )
+    except Exception:
+        if mode == "chunked_noack":
+            _LOGGER.warning("Write without response failed; this panel falls back to chunked writes")
+            api._wall_write_mode = "chunked"
+        raise
 
 
 async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> None:

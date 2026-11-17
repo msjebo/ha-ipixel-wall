@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.3 (2026-11-17)
+- Sneller streamen: frames gaan in blokjes van 244 bytes zonder bevestiging per blokje (`STREAM_WRITE_MODE`), met automatische terugval per paneel
+
 ## 0.7.2 (2026-11-17)
 - Accuteken `🔋` in het DMD-lettertype
 

@@ -44,3 +44,6 @@ def panel_entities(entry) -> list[str]:
 
 # Weather entity for the TV view (None = first weather entity found)
 TV_WEATHER_ENTITY = None
+
+# How stream frames are written: "chunked_noack" (fastest), "chunked" or "single"
+STREAM_WRITE_MODE = "chunked_noack"
