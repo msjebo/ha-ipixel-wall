@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.4 (2026-11-17)
+- Fix: after a transition a panel could keep showing the previous item. The final image is now sent with acknowledgements, and streams refresh every panel once per loop
+
 ## 0.7.3 (2026-11-17)
 - Faster streaming: frames are written in 244-byte chunks without a response per chunk (`STREAM_WRITE_MODE`), with automatic fallback per panel
 

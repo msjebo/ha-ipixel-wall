@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.4 (2026-11-17)
+- Oplossing: na een overgang kon een paneel het vorige onderdeel blijven tonen. Het eindbeeld wordt nu met bevestiging verstuurd, en streams verversen elk paneel één keer per herhaling
+
 ## 0.7.3 (2026-11-17)
 - Sneller streamen: frames gaan in blokjes van 244 bytes zonder bevestiging per blokje (`STREAM_WRITE_MODE`), met automatische terugval per paneel
 

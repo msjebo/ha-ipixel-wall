@@ -363,7 +363,11 @@ async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> Non
     last = list(data.get("panel_png") or [None] * len(apis))
     ev = asyncio.get_running_loop()
     try:
+        loops = 0
         while True:
+            if loops:
+                last = [None] * len(apis)  # keyframe: refresh every panel once per loop
+            loops += 1
             start = ev.time()
             t = start
             late = 0
@@ -499,23 +503,16 @@ async def _play_transition(hass, data, new_frame, kind=None) -> bool:
             await asyncio.sleep(wait)
         else:
             t = ev.time()
-    # settle: send the final image once more to every panel, in case one dropped a frame
+    # settle: send the final image once more WITH acknowledgements, so a panel that
+    # dropped a fast (unacknowledged) frame is guaranteed to show the right picture
     await asyncio.sleep(0.2)
-    final = per_frame[-1]
-    async with data["lock"]:
-        results = await asyncio.gather(
-            *(_fast_write(api, cmds) for api, (png, cmds) in zip(apis, final)),
-            return_exceptions=True,
-        )
-    for i, res in enumerate(results):
-        if isinstance(res, Exception):
-            _LOGGER.warning("Transition settle panel %s failed: %s", i + 1, res)
-            last[i] = None
-            await _reset_connection(apis[i])
-        else:
-            last[i] = final[i][0]
     data["panel_png"] = last
-    return all(p is not None for p in last)
+    try:
+        await _send_tiles(data, [png for png, _ in per_frame[-1]], ".png")
+    except Exception as err:
+        _LOGGER.warning("Transition settle failed: %s", err)
+        return False
+    return True
 
 
 # ===================== Boot screen =====================
