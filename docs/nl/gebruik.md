@@ -44,7 +44,7 @@ Alle tekst gebruikt een **DMD-pixellettertype**. Met een voorvoegsel bepaal je d
 | `[fs=2]12:45` | Vaste vergroting 1, 2 of 3 |
 | `[ttf]Hallo` | Het oude, gladde lettertype van iPIXEL Color |
 
-- **Ondersteunde tekens:** ASCII, €, ° en ⚡ (bliksem/laden), en accenten op kleine letters (België, café). Typografische
+- **Ondersteunde tekens:** ASCII, €, °, ⚡ (bliksem/laden) en 🔋 (accu), en accenten op kleine letters (België, café). Typografische
   aanhalingstekens en gedachtestreepjes worden omgezet. Onbekende tekens worden een `?`.
 - **Te lange tekst** wordt rechts afgekapt. Knip lange teksten in je template, bijvoorbeeld met
   `wordwrap` (zie [Automatiseringen](automatiseringen.md)).

@@ -46,7 +46,7 @@ All text uses a **DMD pixel font**. A prefix sets the style:
 
 (`vast` is Dutch for "fixed".)
 
-- **Supported characters:** ASCII, €, ° and ⚡ (lightning/charging), and accents on lowercase letters (België, café).
+- **Supported characters:** ASCII, €, °, ⚡ (lightning/charging) and 🔋 (battery), and accents on lowercase letters (België, café).
   Typographic quotes and dashes are converted. Unknown characters become `?`.
 - **Text that is too long** is cut off on the right. Shorten long texts in your template, for
   example with `wordwrap` (see [Automations](automations.md)).

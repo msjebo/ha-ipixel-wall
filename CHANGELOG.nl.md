@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.2 (2026-11-17)
+- Accuteken `🔋` in het DMD-lettertype
+
 ## 0.7.1 (2026-11-13)
 - Voorbereiding voor de standaardlijst van HACS: merkicoon, validatieworkflow (HACS + hassfest), `ipixel_color` als `after_dependencies`
 

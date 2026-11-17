@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.2 (2026-11-17)
+- Battery glyph `🔋` in the DMD font
+
 ## 0.7.1 (2026-11-13)
 - Preparation for the HACS default list: brand icon, validation workflow (HACS + hassfest), `ipixel_color` as `after_dependencies`
 
