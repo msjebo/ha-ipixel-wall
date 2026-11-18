@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.5 (2026-11-18)
+- Oplossing: panelen konden delen van de vorige animatie blijven tonen. Een lopende stream wordt nu tussen twee frames gestopt in plaats van midden in een schrijfactie
+
 ## 0.7.4 (2026-11-17)
 - Oplossing: na een overgang kon een paneel het vorige onderdeel blijven tonen. Het eindbeeld wordt nu met bevestiging verstuurd, en streams verversen elk paneel één keer per herhaling
 

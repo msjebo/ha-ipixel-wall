@@ -177,10 +177,7 @@ async def _send_tiles(data: dict, tiles: list[bytes], extension: str) -> None:
 
 async def async_show_text(hass, data: dict) -> None:
     """Display text using static PNG or device-native GIF marquee."""
-    task = data.get("task")
-    if task:
-        task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
 
     data["media_type"] = None
     data["media_title"] = None
@@ -246,10 +243,7 @@ async def async_show_image(
         data["width"],
         crop,
     )
-    _prev_task = data.get("task")
-    if _prev_task:
-        _prev_task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
     shown = await _play_transition(hass, data, frames[0], transition)
     _set_preview(data, frames, durations if is_gif else None)
     _src, _bg = source or (lambda w: raw), data["background_color"]
@@ -262,10 +256,7 @@ async def async_show_image(
         data["media_title"] = media_title or "iPIXEL Wall image"
         data["text"] = ""
         return
-    _old_task = data.get("task")
-    if _old_task:
-        _old_task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
     if is_gif:
         tiles = await hass.async_add_executor_job(split_gif, frames, durations, loop)
         await _send_tiles(data, tiles, ".gif")
@@ -280,10 +271,7 @@ async def async_show_image(
 
     data["media_title"] = media_title or "iPIXEL Wall image"
     data["text"] = ""
-    task = data.get("task")
-    if task:
-        task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
 
 
 async def async_clear_wall(data: dict) -> None:
@@ -358,7 +346,7 @@ async def _fast_write(api, commands) -> None:
         raise
 
 
-async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> None:
+async def _stream_loop(data, per_frame, durations, key=None, frames=None, stop=None) -> None:
     apis = data["apis"]
     last = list(data.get("panel_png") or [None] * len(apis))
     ev = asyncio.get_running_loop()
@@ -373,6 +361,8 @@ async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> Non
             late = 0
             pos = 0.0
             for idx, (row, dur) in enumerate(zip(per_frame, durations)):
+                if stop is not None and stop.is_set():
+                    return
                 jobs, owners = [], []
                 for i, (api, (png, cmds)) in enumerate(zip(apis, row)):
                     if png != last[i]:
@@ -396,7 +386,14 @@ async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> Non
                 t += dur / 1000
                 wait = t - ev.time()
                 if wait > 0:
-                    await asyncio.sleep(wait)
+                    if stop is not None:
+                        try:
+                            await asyncio.wait_for(stop.wait(), timeout=wait)
+                            return
+                        except asyncio.TimeoutError:
+                            pass
+                    else:
+                        await asyncio.sleep(wait)
                 else:
                     late += 1
                     t = ev.time()
@@ -411,10 +408,7 @@ async def _stream_loop(data, per_frame, durations, key=None, frames=None) -> Non
 
 
 async def async_stream_frames(hass, data, frames, durations) -> None:
-    old = data.get("task")
-    if old:
-        old.cancel()
-        data["task"] = None
+    await _stop_stream(data)
     min_ms = getattr(_const, "STREAM_MIN_FRAME_MS", 150)
     frames, durations = _merge_min(frames, durations, min_ms)
     infos = []
@@ -424,8 +418,10 @@ async def async_stream_frames(hass, data, frames, durations) -> None:
         infos.append(await api.get_device_info())
     per_frame = await hass.async_add_executor_job(_build_stream_commands, frames, infos)
     _LOGGER.info("Streaming start: %s frames, min %s ms", len(per_frame), min_ms)
+    stop = asyncio.Event()
+    data["stream_stop"] = stop
     data["task"] = hass.async_create_background_task(
-        _stream_loop(data, per_frame, durations, (data.get("preview") or (None, None, None))[2], frames),
+        _stream_loop(data, per_frame, durations, (data.get("preview") or (None, None, None))[2], frames, stop),
         "ipixel_wall_stream"
     )
 
@@ -554,10 +550,7 @@ def _black_slot_cmds(info: dict, slot: int = 1) -> list[bytes]:
 
 async def async_reset_boot_memory(hass, data) -> None:
     """Delete stored slots on every panel, store black in slot 1, then restore the wall."""
-    task = data.get("task")
-    if task:
-        task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
 
     async def _one(i, api, info):
         for slot in range(1, BOOT_SLOTS_TO_CLEAR + 1):
@@ -593,10 +586,7 @@ def _clear_cmds() -> list[bytes]:
 
 async def async_factory_reset(hass, data) -> None:
     """Wipe ALL stored content (and device settings), then store a black boot screen."""
-    task = data.get("task")
-    if task:
-        task.cancel()
-        data["task"] = None
+    await _stop_stream(data)
 
     async with data["lock"]:
         infos = await _device_infos(data)
@@ -641,3 +631,29 @@ async def async_factory_reset(hass, data) -> None:
     if canvas is None:
         canvas = Image.new("RGB", (data["width"], PANEL_HEIGHT), (0, 0, 0))
     await _send_tiles(data, split_png(canvas), ".png")
+
+
+async def _stop_stream(data) -> None:
+    """Stop a running stream between two frames, never in the middle of a write.
+
+    Cutting a write off half-way leaves a panel waiting for the rest of the image;
+    it then misreads the next image and keeps showing the old one.
+    """
+    task = data.get("task")
+    data["task"] = None
+    if task is None or task.done():
+        return
+    stop = data.get("stream_stop")
+    if stop is not None:
+        stop.set()
+    try:
+        await asyncio.wait_for(asyncio.shield(task), timeout=5)
+    except asyncio.TimeoutError:
+        _LOGGER.warning("Stream did not stop in time; cancelling it")
+        task.cancel()
+        try:
+            await task
+        except (asyncio.CancelledError, Exception):
+            pass
+    except Exception:
+        pass

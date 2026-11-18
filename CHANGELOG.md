@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.5 (2026-11-18)
+- Fix: panels could keep showing parts of the previous animation. A running stream is now stopped between two frames instead of in the middle of a write
+
 ## 0.7.4 (2026-11-17)
 - Fix: after a transition a panel could keep showing the previous item. The final image is now sent with acknowledgements, and streams refresh every panel once per loop
 

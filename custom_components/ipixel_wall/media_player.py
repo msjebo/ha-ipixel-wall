@@ -168,10 +168,8 @@ class IPixelWallMediaPlayer(MediaPlayerEntity):
         return raw
 
     async def async_media_stop(self):
-        task = self.data.get("task")
-        if task:
-            task.cancel()
-            self.data["task"] = None
+        from .manager import _stop_stream
+        await _stop_stream(self.data)
         await async_clear_wall(self.data)
         self._state = MediaPlayerState.IDLE
         self.data["media_title"] = None
