@@ -75,6 +75,7 @@ that passes exact 32x32 images through unchanged.
 | `STREAM_GIFS` | `True` | Stream GIFs by default |
 | `STREAM_MIN_FRAME_MS` | 250 | Minimum frame time when streaming; raise to 300 with 4 panels if frames are often late |
 | `STREAM_WRITE_MODE` | `chunked_noack` | How stream frames are written: `chunked_noack` (fastest), `chunked` (response per 244-byte chunk) or `single` (one long write) |
+| `STREAM_ACK_TIMEOUT` | 1.0 | Max. seconds to wait for a panel to confirm an image while streaming |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Delay per panel for the resync after a regular GIF upload |
 
 Restart Home Assistant after a change. These files are overwritten by an update.

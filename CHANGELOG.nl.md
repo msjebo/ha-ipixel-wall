@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.6 (2026-11-18)
+- Oplossing: een paneel kon tijdens een GIF even zwart worden. Bij het streamen gaat het volgende beeld pas weg als het paneel heeft bevestigd dat het vorige binnen is (`STREAM_ACK_TIMEOUT`)
+
 ## 0.7.5 (2026-11-18)
 - Oplossing: panelen konden delen van de vorige animatie blijven tonen. Een lopende stream wordt nu tussen twee frames gestopt in plaats van midden in een schrijfactie
 

@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.6 (2026-11-18)
+- Fix: a panel could go black for a moment during a GIF. While streaming, the next image is only sent after the panel confirms it received the previous one (`STREAM_ACK_TIMEOUT`)
+
 ## 0.7.5 (2026-11-18)
 - Fix: panels could keep showing parts of the previous animation. A running stream is now stopped between two frames instead of in the middle of a write
 

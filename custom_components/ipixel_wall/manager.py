@@ -61,6 +61,7 @@ async def _prepare_panel(panel_index: int, api, image_bytes: bytes, extension: s
 
 async def _send_commands(panel_index: int, api, commands: list[bytes]) -> None:
     """Send a list of commands to one panel in order."""
+    api._wall_ack_client = None  # send_command replaces the notify handler
     for command in commands:
         success = await api._bluetooth.send_command(command)
         if not success:
@@ -333,12 +334,24 @@ async def _fast_write(api, commands) -> None:
         for cmd in commands:
             await client.write_gatt_char(_bt_client.WRITE_UUID, cmd)
         return
+    listening = await _ensure_ack_listener(api, client)
     try:
         for cmd in commands:
+            if listening:
+                api._wall_ack.clear()
             for pos in range(0, len(cmd), 244):
                 await client.write_gatt_char(
                     _bt_client.WRITE_UUID, cmd[pos:pos + 244], response=(mode != "chunked_noack")
                 )
+            if listening:
+                # the panel reports when it has the whole image; sending the next one
+                # earlier makes it drop the image and show black
+                try:
+                    await asyncio.wait_for(
+                        api._wall_ack.wait(), getattr(_const, "STREAM_ACK_TIMEOUT", 1.0)
+                    )
+                except asyncio.TimeoutError:
+                    _LOGGER.debug("No ack from panel within timeout")
     except Exception:
         if mode == "chunked_noack":
             _LOGGER.warning("Write without response failed; this panel falls back to chunked writes")
@@ -657,3 +670,42 @@ async def _stop_stream(data) -> None:
             pass
     except Exception:
         pass
+
+
+def _ack_handler(api):
+    """Notification handler that flags panel acks and still feeds the original handler."""
+    original = getattr(api, "_notification_handler", None)
+
+    def handler(sender, data):
+        try:
+            if data and len(data) > 4 and data[0] == 0x05 and data[4] in (0, 1, 3):
+                event = getattr(api, "_wall_ack", None)
+                if event is not None:
+                    event.set()
+        finally:
+            if original is not None:
+                try:
+                    original(sender, data)
+                except Exception:
+                    pass
+
+    return handler
+
+
+async def _ensure_ack_listener(api, client) -> bool:
+    """Make sure panel acknowledgements reach us (once per connection)."""
+    if getattr(api, "_wall_ack_client", None) is client and getattr(api, "_wall_ack", None):
+        return True
+    try:
+        try:
+            await client.stop_notify(_bt_client.NOTIFY_UUID)
+        except Exception:
+            pass
+        api._wall_ack = asyncio.Event()
+        await client.start_notify(_bt_client.NOTIFY_UUID, _ack_handler(api))
+        api._wall_ack_client = client
+        return True
+    except Exception as err:
+        _LOGGER.debug("Could not listen for panel acks: %s", err)
+        api._wall_ack_client = None
+        return False

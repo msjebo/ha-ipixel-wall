@@ -75,6 +75,7 @@ beelden van precies 32x32 ongewijzigd doorgeeft.
 | `STREAM_GIFS` | `True` | GIF's standaard streamen |
 | `STREAM_MIN_FRAME_MS` | 250 | Minimale frameduur bij streamen; verhoog naar 300 bij 4 panelen als frames vaak te laat zijn |
 | `STREAM_WRITE_MODE` | `chunked_noack` | Hoe frames worden verstuurd: `chunked_noack` (snelst), `chunked` (bevestiging per blokje van 244 bytes) of `single` (één lange schrijfactie) |
+| `STREAM_ACK_TIMEOUT` | 1.0 | Max. aantal seconden wachten op de bevestiging van een paneel tijdens het streamen |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Vertraging per paneel bij de resync na een gewone GIF-upload |
 
 Na een wijziging moet je Home Assistant herstarten. Bij een update worden deze bestanden

@@ -47,3 +47,6 @@ TV_WEATHER_ENTITY = None
 
 # How stream frames are written: "chunked_noack" (fastest), "chunked" or "single"
 STREAM_WRITE_MODE = "chunked_noack"
+
+# Max. seconds to wait for a panel to confirm it received an image while streaming
+STREAM_ACK_TIMEOUT = 1.0
