@@ -9,7 +9,7 @@
 | *Instellen mislukt* | Een paneel is niet geladen in iPIXEL Color | Controleer de panelen in iPIXEL Color en herlaad daarna iPIXEL Wall |
 | Panelen blijven soms leeg of tonen half geladen beelden | Meerdere automatiseringen schrijven tegelijk naar de wall of naar de losse panelen | Gebruik **één** automatisering voor de wall |
 | Animaties lopen niet synchroon | Een GIF wordt niet gestreamd (`stream: false`) of `STREAM_GIFS = False` | Laat streamen aan |
-| Animaties haperen of lopen trager | Bluetooth haalt het tempo niet (`te laat:` in de log) | Verhoog `STREAM_MIN_FRAME_MS`, gebruik minder kleuren en frames, of plaats een ESPHome Bluetooth-proxy dicht bij de panelen |
+| Animaties haperen of lopen trager | Bluetooth haalt het tempo niet (`te laat:` in de log) | Verhoog `STREAM_MIN_FRAME_MS` (bijv. naar 200 of 250) en gebruik minder kleuren en frames. Bluetooth-proxy's helpen alleen bij bereik: met 4 streamende panelen kan een ESP32-proxy steeds verbindingen verliezen, en de ingebouwde adapter is dan vaak stabieler |
 | *GIF has N frames; maximum is …* | GIF te lang | Kort de GIF in of verhoog `MAX_GIF_FRAMES` |
 | *weather.… not found* | Verkeerde entiteitsnaam | Zoek de naam op met `{{ states.weather \| map(attribute='entity_id') \| list }}` |
 | `[vast]` wordt letterlijk getoond | Spatie of regeleinde vóór het voorvoegsel | Gebruik `-%}` in de template, of zet `[vast]` aan het begin van de waarde |

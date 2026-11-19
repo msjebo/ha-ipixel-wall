@@ -9,7 +9,7 @@
 | *Setup failed* | A panel isn't loaded in iPIXEL Color | Check the panels in iPIXEL Color, then reload iPIXEL Wall |
 | Panels sometimes stay empty or show half-loaded images | Several automations write to the wall or to the individual panels at once | Use **one** automation for the wall |
 | Animations aren't in sync | A GIF isn't streamed (`stream: false`) or `STREAM_GIFS = False` | Keep streaming enabled |
-| Animations stutter or run slower | Bluetooth can't keep up (`te laat:` in the log) | Raise `STREAM_MIN_FRAME_MS`, use fewer colours and frames, or put an ESPHome Bluetooth proxy close to the panels |
+| Animations stutter or run slower | Bluetooth can't keep up (`te laat:` in the log) | Raise `STREAM_MIN_FRAME_MS` (e.g. to 200 or 250) and use fewer colours and frames. Bluetooth proxies only help with range: with 4 streaming panels an ESP32 proxy can keep dropping connections, and the built-in adapter is often more stable |
 | *GIF has N frames; maximum is …* | GIF too long | Shorten the GIF or raise `MAX_GIF_FRAMES` |
 | *weather.… not found* | Wrong entity name | Look it up with `{{ states.weather \| map(attribute='entity_id') \| list }}` |
 | `[vast]` is shown literally | Space or line break before the prefix | Use `-%}` in the template, or put `[vast]` at the very start of the value |

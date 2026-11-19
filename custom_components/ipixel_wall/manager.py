@@ -487,7 +487,7 @@ async def _play_transition(hass, data, new_frame, kind=None) -> bool:
     last = list(data.get("panel_png") or [None] * len(apis))
     ev = asyncio.get_running_loop()
     # never faster than the panels can decode; too-fast frames get dropped (black panel)
-    frame_ms = max(frame_ms, getattr(_const, "STREAM_MIN_FRAME_MS", 250))
+    frame_ms = max(frame_ms, getattr(_const, "STREAM_MIN_FRAME_MS", 150))
     t = ev.time()
     for frame, row in zip(frames, per_frame):
         jobs, owners = [], []

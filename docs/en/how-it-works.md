@@ -38,8 +38,9 @@ frame as a PNG tile to the panels. Only panels whose image changes receive a new
 
 ### Bluetooth limits
 
-- One frame to all panels takes about **230 ms**. That's why the minimum frame time is
-  `STREAM_MIN_FRAME_MS = 250`, roughly 4 frames per second. Shorter frames are merged, so fast
+- The minimum frame time is `STREAM_MIN_FRAME_MS = 150`, roughly 6-7 frames per second. Each panel
+  confirms every image before it gets the next one, so a frame that takes longer only arrives late.
+  Only panels whose image changes are sent a new frame, so calm GIFs need less time than busy ones. Shorter frames are merged, so fast
   GIFs keep their duration but have fewer frames.
 - When streaming, iPIXEL Color's regular `send_command` is bypassed. That one toggles
   notifications off and on for every packet and waits up to 2 seconds for a reply. Instead, data
@@ -73,7 +74,7 @@ that passes exact 32x32 images through unchanged.
 | `MAX_GIF_FRAMES` | 2500 | Maximum number of frames per GIF |
 | `MAX_MEDIA_BYTES` | 10 MB | Maximum file size |
 | `STREAM_GIFS` | `True` | Stream GIFs by default |
-| `STREAM_MIN_FRAME_MS` | 250 | Minimum frame time when streaming; raise to 300 with 4 panels if frames are often late |
+| `STREAM_MIN_FRAME_MS` | 150 | Minimum frame time when streaming; raise to 200 or 250 if frames are often late (`te laat` in the log) |
 | `STREAM_WRITE_MODE` | `chunked_noack` | How stream frames are written: `chunked_noack` (fastest), `chunked` (response per 244-byte chunk) or `single` (one long write) |
 | `STREAM_ACK_TIMEOUT` | 1.0 | Max. seconds to wait for a panel to confirm an image while streaming |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Delay per panel for the resync after a regular GIF upload |

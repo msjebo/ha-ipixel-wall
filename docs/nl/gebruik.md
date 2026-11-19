@@ -103,7 +103,7 @@ daarom niet langer dan ongeveer een minuut staan.
 - **Formaat:** maak GIF's precies **96x32** of **128x32** (128x32 is het formaat van een echte
   pinball-DMD) en gebruik weinig kleuren, liefst 16. Dat scheelt rekenwerk en Bluetooth.
 - **Maximaal aantal frames:** 2500 (`MAX_GIF_FRAMES` in `const.py`).
-- **Bij streamen** duurt elk frame minimaal 250 ms, omdat de panelen niet sneller bijwerken.
+- **Bij streamen** duurt elk frame minimaal 150 ms (ongeveer 6 à 7 frames per seconde), omdat de panelen niet sneller bijwerken.
   Kortere frames worden samengevoegd; de totale duur blijft gelijk.
 
 ## Overgangen

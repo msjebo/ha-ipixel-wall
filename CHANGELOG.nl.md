@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.7 (2026-11-19)
+- Snellere animaties: de minimale frameduur bij streamen is nu 150 ms in plaats van 250 ms (`STREAM_MIN_FRAME_MS`). Dankzij de bevestigingen van de panelen uit 0.7.6 geeft dat geen zwarte panelen meer
+
 ## 0.7.6 (2026-11-18)
 - Oplossing: een paneel kon tijdens een GIF even zwart worden. Bij het streamen gaat het volgende beeld pas weg als het paneel heeft bevestigd dat het vorige binnen is (`STREAM_ACK_TIMEOUT`)
 

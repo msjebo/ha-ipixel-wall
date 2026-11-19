@@ -34,7 +34,7 @@ WALL_WIDTH = PANEL_WIDTH * MIN_PANELS  # fallback only; real width = panels * 32
 PANEL_START_OFFSETS_MS = (0, 0, 0, 0)  # per paneel, links naar rechts
 
 STREAM_GIFS = True
-STREAM_MIN_FRAME_MS = 250
+STREAM_MIN_FRAME_MS = 150
 
 
 def panel_entities(entry) -> list[str]:

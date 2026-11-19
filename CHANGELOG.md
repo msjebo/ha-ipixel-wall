@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.7.7 (2026-11-19)
+- Faster animations: the minimum frame time when streaming is now 150 ms instead of 250 ms (`STREAM_MIN_FRAME_MS`). Thanks to the panel acknowledgements from 0.7.6 this no longer causes black panels
+
 ## 0.7.6 (2026-11-18)
 - Fix: a panel could go black for a moment during a GIF. While streaming, the next image is only sent after the panel confirms it received the previous one (`STREAM_ACK_TIMEOUT`)
 

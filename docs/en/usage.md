@@ -105,7 +105,7 @@ than about a minute.
 - **Size:** make GIFs exactly **96x32** or **128x32** (128x32 is the size of a real pinball DMD)
   and use few colours, ideally 16. That saves processing and Bluetooth.
 - **Maximum number of frames:** 2500 (`MAX_GIF_FRAMES` in `const.py`).
-- **When streaming** every frame lasts at least 250 ms, because the panels can't update faster.
+- **When streaming** every frame lasts at least 150 ms (about 6-7 frames per second), because the panels can't update faster.
   Shorter frames are merged; the total duration stays the same.
 
 ## Transitions

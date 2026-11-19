@@ -39,8 +39,10 @@ nieuw frame.
 
 ### Bluetooth-grenzen
 
-- Een frame naar alle panelen kost ongeveer **230 ms**. Daarom is de ondergrens per frame
-  `STREAM_MIN_FRAME_MS = 250`, wat neerkomt op ongeveer 4 frames per seconde. Kortere frames
+- De ondergrens per frame is `STREAM_MIN_FRAME_MS = 150`, ongeveer 6 à 7 frames per seconde. Elk
+  paneel bevestigt elk beeld voordat het het volgende krijgt, dus een frame dat langer duurt komt
+  alleen later. Alleen panelen waarvan het beeld verandert krijgen een nieuw frame, dus rustige
+  GIF's hebben minder tijd nodig dan drukke. Kortere frames
   worden samengevoegd, zodat snelle GIF's even lang duren maar minder frames hebben.
 - Bij streamen wordt de normale `send_command` van iPIXEL Color overgeslagen. Die zet per pakket
   de notificaties uit en aan en wacht tot 2 seconden op een antwoord. In plaats daarvan wordt
@@ -73,7 +75,7 @@ beelden van precies 32x32 ongewijzigd doorgeeft.
 | `MAX_GIF_FRAMES` | 2500 | Maximaal aantal frames per GIF |
 | `MAX_MEDIA_BYTES` | 10 MB | Maximale bestandsgrootte |
 | `STREAM_GIFS` | `True` | GIF's standaard streamen |
-| `STREAM_MIN_FRAME_MS` | 250 | Minimale frameduur bij streamen; verhoog naar 300 bij 4 panelen als frames vaak te laat zijn |
+| `STREAM_MIN_FRAME_MS` | 150 | Minimale frameduur bij streamen; verhoog naar 200 of 250 als frames vaak te laat zijn (`te laat` in de log) |
 | `STREAM_WRITE_MODE` | `chunked_noack` | Hoe frames worden verstuurd: `chunked_noack` (snelst), `chunked` (bevestiging per blokje van 244 bytes) of `single` (één lange schrijfactie) |
 | `STREAM_ACK_TIMEOUT` | 1.0 | Max. aantal seconden wachten op de bevestiging van een paneel tijdens het streamen |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Vertraging per paneel bij de resync na een gewone GIF-upload |
