@@ -2,6 +2,9 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.8.1 (2026-11-25)
+- Fix: images from a URL could be shown half loaded. The download now waits until the whole file has arrived
+
 ## 0.8.0 (2026-11-25)
 - New option `extra.panel` for `play_media`: places an image (with `fit`) on one panel instead of in the middle, e.g. an artist photo on panel 2
 

@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.8.1 (2026-11-25)
+- Oplossing: afbeeldingen van een URL konden half geladen getoond worden. Het downloaden wacht nu tot het hele bestand binnen is
+
 ## 0.8.0 (2026-11-25)
 - Nieuwe optie `extra.panel` voor `play_media`: zet een afbeelding (met `fit`) op één paneel in plaats van in het midden, bijv. een artiestfoto op paneel 2
 

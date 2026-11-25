@@ -155,7 +155,14 @@ class IPixelWallMediaPlayer(MediaPlayerEntity):
             content_length = response.headers.get("Content-Length")
             if content_length and int(content_length) > MAX_MEDIA_BYTES:
                 raise ValueError("Image/GIF exceeds the 10 MB limit")
-            raw = await response.content.read(MAX_MEDIA_BYTES + 1)
+            # read until the end: content.read(n) only returns what has arrived so far
+            chunks, size = [], 0
+            async for chunk in response.content.iter_chunked(65536):
+                chunks.append(chunk)
+                size += len(chunk)
+                if size > MAX_MEDIA_BYTES:
+                    break
+            raw = b"".join(chunks)
             raw = self._check_size(raw)
             title = Path(parsed.path).name or parsed.netloc
             return raw, title
