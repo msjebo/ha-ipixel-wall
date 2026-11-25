@@ -6,6 +6,10 @@ import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import ImageFile
+
+# Some web images (e.g. Deezer artist photos) miss a few trailing bytes; show them anyway
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 from homeassistant.core import HomeAssistant
 

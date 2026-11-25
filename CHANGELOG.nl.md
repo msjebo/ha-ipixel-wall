@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.9 (2026-11-25)
+- Oplossing: afbeeldingen waarvan aan het eind een paar bytes ontbreken (zoals sommige artiestfoto's van Deezer) gaven "image file is truncated"; die worden nu getoond
+
 ## 0.7.8 (2026-11-25)
 - Nieuwe schuif `number.ipixel_wall_frametijd_animaties` om de minimale tijd per animatieframe (50-500 ms) vanaf het dashboard in te stellen; de waarde blijft bewaard na een herstart
 
