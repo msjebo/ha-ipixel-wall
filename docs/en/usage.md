@@ -82,6 +82,7 @@ data:
 | Option | Values | Effect |
 |---|---|---|
 | `crop` | `top`, `bottom`, `left`, `right` or `[left, top, right, bottom]` as fractions 0-1 | First cuts out part of the source, for example `[0, 0, 1, 0.33]` = top third |
+| `panel` | `1`-`4` | With `fit`: centre the image on this panel (1 = leftmost) instead of the middle of the wall, e.g. for a square photo |
 | `resize_mode` | `fit` (default) or `crop` | `fit` = everything visible with black bars; `crop` = fill the wall, edges are cut off |
 | `stream` | `true` / `false` | Stream a GIF (default, synchronised) or upload it as a single GIF (smoother, not synchronised) |
 | `transition` | `none`, `wipe`, `slide`, `dissolve`, `drop` | Transition for this item only |

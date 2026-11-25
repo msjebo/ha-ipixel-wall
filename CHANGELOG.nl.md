@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.8.0 (2026-11-25)
+- Nieuwe optie `extra.panel` voor `play_media`: zet een afbeelding (met `fit`) op één paneel in plaats van in het midden, bijv. een artiestfoto op paneel 2
+
 ## 0.7.9 (2026-11-25)
 - Oplossing: afbeeldingen waarvan aan het eind een paar bytes ontbreken (zoals sommige artiestfoto's van Deezer) gaven "image file is truncated"; die worden nu getoond
 

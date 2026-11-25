@@ -78,6 +78,7 @@ class IPixelWallMediaPlayer(MediaPlayerEntity):
                 transition=extra.get("transition"),
                 media_title=title,
                 crop=extra.get("crop"),
+                panel=extra.get("panel"),
             )
             self._state = MediaPlayerState.PLAYING
             self.async_write_ha_state()

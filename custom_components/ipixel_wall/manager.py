@@ -232,6 +232,7 @@ async def async_show_image(
     crop=None,
     source=None,
     transition=None,
+    panel=None,
 ) -> None:
     """Display an uploaded or downloaded image/GIF over the whole wall."""
     from .render import prepare_image_frames
@@ -243,12 +244,13 @@ async def async_show_image(
         data["background_color"],
         data["width"],
         crop,
+        panel,
     )
     await _stop_stream(data)
     shown = await _play_transition(hass, data, frames[0], transition)
     _set_preview(data, frames, durations if is_gif else None)
     _src, _bg = source or (lambda w: raw), data["background_color"]
-    _set_preview_src(data, lambda w: prepare_image_frames(_src(w), resize_mode, _bg, w, crop)[:2])
+    _set_preview_src(data, lambda w: prepare_image_frames(_src(w), resize_mode, _bg, w, crop, panel)[:2])
     if stream is None:
         stream = getattr(_const, "STREAM_GIFS", False)
     if is_gif and stream:

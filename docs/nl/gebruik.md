@@ -80,6 +80,7 @@ data:
 | Optie | Waarden | Werking |
 |---|---|---|
 | `crop` | `top`, `bottom`, `left`, `right` of `[links, boven, rechts, onder]` als fracties 0-1 | Snijdt eerst een deel uit de bron, bijvoorbeeld `[0, 0, 1, 0.33]` = bovenste derde |
+| `panel` | `1`-`4` | Bij `fit`: zet het beeld midden op dit paneel (1 = meest linkse) in plaats van midden op de wall, bijv. voor een vierkante foto |
 | `resize_mode` | `fit` (standaard) of `crop` | `fit` = alles zichtbaar met zwarte randen; `crop` = wall vullen, randen vallen weg |
 | `stream` | `true` / `false` | Een GIF streamen (standaard, synchroon) of als losse GIF uploaden (vloeiender, niet synchroon) |
 | `transition` | `none`, `wipe`, `slide`, `dissolve`, `drop` | Overgang alleen voor dit onderdeel |

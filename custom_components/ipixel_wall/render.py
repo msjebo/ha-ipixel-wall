@@ -127,6 +127,7 @@ def _canvas_frame(
     resize_mode: str,
     background: tuple[int, int, int],
     width: int = WALL_WIDTH,
+    panel=None,
 ) -> Image.Image:
     frame = frame.convert("RGBA")
     if resize_mode == "crop":
@@ -134,7 +135,12 @@ def _canvas_frame(
     else:
         fitted = ImageOps.contain(frame, (width, WALL_HEIGHT), method=Image.Resampling.NEAREST)
         canvas = Image.new("RGBA", (width, WALL_HEIGHT), (*background, 255))
-        canvas.alpha_composite(fitted, ((width - fitted.width) // 2, (WALL_HEIGHT - fitted.height) // 2))
+        x = (width - fitted.width) // 2
+        if panel:
+            # centre the image on one panel (1 = leftmost)
+            index = min(max(int(panel), 1), width // PANEL_WIDTH) - 1
+            x = min(max(index * PANEL_WIDTH + (PANEL_WIDTH - fitted.width) // 2, 0), width - fitted.width)
+        canvas.alpha_composite(fitted, (x, (WALL_HEIGHT - fitted.height) // 2))
         fitted = canvas
     background_image = Image.new("RGBA", fitted.size, (*background, 255))
     background_image.alpha_composite(fitted)
@@ -169,6 +175,7 @@ def prepare_image_frames(
     background: tuple[int, int, int] = (0, 0, 0),
     width: int = WALL_WIDTH,
     crop=None,
+    panel=None,
 ) -> tuple[list[Image.Image], list[int], int, bool]:
     """Decode, normalize and resize a PNG/GIF to wall-sized frames."""
     source = Image.open(io.BytesIO(raw))
@@ -185,7 +192,7 @@ def prepare_image_frames(
         box = _parse_crop(crop, frame.size)
         if box:
             frame = frame.crop(box)
-        frames.append(_canvas_frame(frame, resize_mode, background, width))
+        frames.append(_canvas_frame(frame, resize_mode, background, width, panel))
         durations.append(max(20, int(source.info.get("duration", 100))))
 
     loop = int(source.info.get("loop", 0))
