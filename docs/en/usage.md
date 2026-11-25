@@ -13,6 +13,7 @@ The names below are the defaults. Check them under the **iPIXEL Wall** device.
 | `select.ipixel_wall_display_mode` | `static` (still text) or `scroll` (marquee) |
 | `select.ipixel_wall_transition` | Transition between items: `none`, `wipe`, `slide`, `dissolve` (default), `drop` |
 | `number.ipixel_wall_scroll_frame_interval` | Marquee speed |
+| `number.ipixel_wall_frametijd_animaties` | "Animation frame time": minimum ms per frame for GIFs and transitions (default 150). Lower = smoother, but frames may arrive late. Takes effect from the next item |
 | `light.ipixel_wall_text_color` | Text colour (also used by the clock) |
 | `light.ipixel_wall_background_color` | Background colour |
 | `camera.ipixel_wall_preview` | Preview of the wall as configured |

@@ -2,6 +2,9 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.7.8 (2026-11-25)
+- Nieuwe schuif `number.ipixel_wall_frametijd_animaties` om de minimale tijd per animatieframe (50-500 ms) vanaf het dashboard in te stellen; de waarde blijft bewaard na een herstart
+
 ## 0.7.7 (2026-11-19)
 - Snellere animaties: de minimale frameduur bij streamen is nu 150 ms in plaats van 250 ms (`STREAM_MIN_FRAME_MS`). Dankzij de bevestigingen van de panelen uit 0.7.6 geeft dat geen zwarte panelen meer
 

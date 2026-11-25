@@ -75,7 +75,7 @@ beelden van precies 32x32 ongewijzigd doorgeeft.
 | `MAX_GIF_FRAMES` | 2500 | Maximaal aantal frames per GIF |
 | `MAX_MEDIA_BYTES` | 10 MB | Maximale bestandsgrootte |
 | `STREAM_GIFS` | `True` | GIF's standaard streamen |
-| `STREAM_MIN_FRAME_MS` | 150 | Minimale frameduur bij streamen; verhoog naar 200 of 250 als frames vaak te laat zijn (`te laat` in de log) |
+| `STREAM_MIN_FRAME_MS` | 150 | Standaard voor de schuif **Frametijd animaties** (minimale frameduur bij streamen); verhoog naar 200 of 250 als frames vaak te laat zijn (`te laat` in de log) |
 | `STREAM_WRITE_MODE` | `chunked_noack` | Hoe frames worden verstuurd: `chunked_noack` (snelst), `chunked` (bevestiging per blokje van 244 bytes) of `single` (één lange schrijfactie) |
 | `STREAM_ACK_TIMEOUT` | 1.0 | Max. aantal seconden wachten op de bevestiging van een paneel tijdens het streamen |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Vertraging per paneel bij de resync na een gewone GIF-upload |

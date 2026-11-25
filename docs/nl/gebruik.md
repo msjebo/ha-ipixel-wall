@@ -12,6 +12,7 @@ De namen hieronder zijn de standaardnamen. Controleer ze onder het apparaat **iP
 | `media_player.ipixel_wall_media` | Plaatjes, GIF's, camera, weer en klok tonen; **stoppen** maakt de wall zwart |
 | `select.ipixel_wall_display_mode` | `static` (stilstaande tekst) of `scroll` (lichtkrant) |
 | `select.ipixel_wall_transition` | Overgang tussen onderdelen: `none`, `wipe`, `slide`, `dissolve` (standaard), `drop` |
+| `number.ipixel_wall_frametijd_animaties` | Minimale tijd per frame voor GIF's en overgangen (standaard 150 ms). Lager = vloeiender, maar frames kunnen te laat komen. Geldt vanaf het volgende item |
 | `number.ipixel_wall_scroll_frame_interval` | Snelheid van de lichtkrant |
 | `light.ipixel_wall_text_color` | Tekstkleur (ook voor de klok) |
 | `light.ipixel_wall_background_color` | Achtergrondkleur |

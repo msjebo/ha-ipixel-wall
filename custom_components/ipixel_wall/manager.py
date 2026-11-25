@@ -359,6 +359,12 @@ async def _fast_write(api, commands) -> None:
         raise
 
 
+def _min_frame_ms(data) -> int:
+    """Minimum frame time: the dashboard setting, else the constant."""
+    value = data.get("min_frame_ms")
+    return int(value) if value else getattr(_const, "STREAM_MIN_FRAME_MS", 150)
+
+
 async def _stream_loop(data, per_frame, durations, key=None, frames=None, stop=None) -> None:
     apis = data["apis"]
     last = list(data.get("panel_png") or [None] * len(apis))
@@ -422,7 +428,7 @@ async def _stream_loop(data, per_frame, durations, key=None, frames=None, stop=N
 
 async def async_stream_frames(hass, data, frames, durations) -> None:
     await _stop_stream(data)
-    min_ms = getattr(_const, "STREAM_MIN_FRAME_MS", 150)
+    min_ms = _min_frame_ms(data)
     frames, durations = _merge_min(frames, durations, min_ms)
     infos = []
     for api in data["apis"]:
@@ -487,7 +493,7 @@ async def _play_transition(hass, data, new_frame, kind=None) -> bool:
     last = list(data.get("panel_png") or [None] * len(apis))
     ev = asyncio.get_running_loop()
     # never faster than the panels can decode; too-fast frames get dropped (black panel)
-    frame_ms = max(frame_ms, getattr(_const, "STREAM_MIN_FRAME_MS", 150))
+    frame_ms = max(frame_ms, _min_frame_ms(data))
     t = ev.time()
     for frame, row in zip(frames, per_frame):
         jobs, owners = [], []

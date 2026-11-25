@@ -74,7 +74,7 @@ that passes exact 32x32 images through unchanged.
 | `MAX_GIF_FRAMES` | 2500 | Maximum number of frames per GIF |
 | `MAX_MEDIA_BYTES` | 10 MB | Maximum file size |
 | `STREAM_GIFS` | `True` | Stream GIFs by default |
-| `STREAM_MIN_FRAME_MS` | 150 | Minimum frame time when streaming; raise to 200 or 250 if frames are often late (`te laat` in the log) |
+| `STREAM_MIN_FRAME_MS` | 150 | Default for the **Frametijd animaties** slider (minimum frame time when streaming); raise to 200 or 250 if frames are often late (`te laat` in the log) |
 | `STREAM_WRITE_MODE` | `chunked_noack` | How stream frames are written: `chunked_noack` (fastest), `chunked` (response per 244-byte chunk) or `single` (one long write) |
 | `STREAM_ACK_TIMEOUT` | 1.0 | Max. seconds to wait for a panel to confirm an image while streaming |
 | `PANEL_START_OFFSETS_MS` | `(0, 0, 0, 0)` | Delay per panel for the resync after a regular GIF upload |
