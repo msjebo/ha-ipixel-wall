@@ -47,7 +47,7 @@ All text uses a **DMD pixel font**. A prefix sets the style:
 
 (`vast` is Dutch for "fixed".)
 
-- **Supported characters:** ASCII, €, °, ⚡ (lightning/charging) and 🔋 (battery), and accents on lowercase letters (België, café).
+- **Supported characters:** ASCII, €, °, ⚡ (lightning/charging), 🔋 (battery) and ☀ (sun), and accents on lowercase letters (België, café).
   Typographic quotes and dashes are converted. Unknown characters become `?`.
 - **Text that is too long** is cut off on the right. Shorten long texts in your template, for
   example with `wordwrap` (see [Automations](automations.md)).
@@ -82,6 +82,7 @@ data:
 | Option | Values | Effect |
 |---|---|---|
 | `crop` | `top`, `bottom`, `left`, `right` or `[left, top, right, bottom]` as fractions 0-1 | First cuts out part of the source, for example `[0, 0, 1, 0.33]` = top third |
+| `text` | text (same prefixes as text, e.g. `[vast]Title\|Artist`) | Puts the image on one panel (`panel`, default 1) and the text next to it, e.g. an artist photo with the song |
 | `panel` | `1`-`4` | With `fit`: centre the image on this panel (1 = leftmost) instead of the middle of the wall, e.g. for a square photo |
 | `resize_mode` | `fit` (default) or `crop` | `fit` = everything visible with black bars; `crop` = fill the wall, edges are cut off |
 | `stream` | `true` / `false` | Stream a GIF (default, synchronised) or upload it as a single GIF (smoother, not synchronised) |

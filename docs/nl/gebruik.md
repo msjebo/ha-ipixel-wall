@@ -45,7 +45,7 @@ Alle tekst gebruikt een **DMD-pixellettertype**. Met een voorvoegsel bepaal je d
 | `[fs=2]12:45` | Vaste vergroting 1, 2 of 3 |
 | `[ttf]Hallo` | Het oude, gladde lettertype van iPIXEL Color |
 
-- **Ondersteunde tekens:** ASCII, €, °, ⚡ (bliksem/laden) en 🔋 (accu), en accenten op kleine letters (België, café). Typografische
+- **Ondersteunde tekens:** ASCII, €, °, ⚡ (bliksem/laden), 🔋 (accu) en ☀ (zon), en accenten op kleine letters (België, café). Typografische
   aanhalingstekens en gedachtestreepjes worden omgezet. Onbekende tekens worden een `?`.
 - **Te lange tekst** wordt rechts afgekapt. Knip lange teksten in je template, bijvoorbeeld met
   `wordwrap` (zie [Automatiseringen](automatiseringen.md)).
@@ -80,6 +80,7 @@ data:
 | Optie | Waarden | Werking |
 |---|---|---|
 | `crop` | `top`, `bottom`, `left`, `right` of `[links, boven, rechts, onder]` als fracties 0-1 | Snijdt eerst een deel uit de bron, bijvoorbeeld `[0, 0, 1, 0.33]` = bovenste derde |
+| `text` | tekst (zelfde voorvoegsels als bij tekst, bijv. `[vast]Titel\|Artiest`) | Zet de afbeelding op één paneel (`panel`, standaard 1) en de tekst ernaast, bijv. een artiestfoto met het nummer |
 | `panel` | `1`-`4` | Bij `fit`: zet het beeld midden op dit paneel (1 = meest linkse) in plaats van midden op de wall, bijv. voor een vierkante foto |
 | `resize_mode` | `fit` (standaard) of `crop` | `fit` = alles zichtbaar met zwarte randen; `crop` = wall vullen, randen vallen weg |
 | `stream` | `true` / `false` | Een GIF streamen (standaard, synchroon) of als losse GIF uploaden (vloeiender, niet synchroon) |

@@ -176,8 +176,16 @@ def prepare_image_frames(
     width: int = WALL_WIDTH,
     crop=None,
     panel=None,
+    text=None,
+    text_color=(255, 255, 255),
 ) -> tuple[list[Image.Image], list[int], int, bool]:
-    """Decode, normalize and resize a PNG/GIF to wall-sized frames."""
+    """Decode, normalize and resize a PNG/GIF to wall-sized frames.
+
+    With `text` the image goes on one panel (`panel`, default 1) and the text
+    is drawn on the widest free part of the wall next to it.
+    """
+    if text and not panel:
+        panel = 1
     source = Image.open(io.BytesIO(raw))
     is_gif = source.format == "GIF" and getattr(source, "n_frames", 1) > 1
     frame_count = getattr(source, "n_frames", 1)
@@ -194,6 +202,17 @@ def prepare_image_frames(
             frame = frame.crop(box)
         frames.append(_canvas_frame(frame, resize_mode, background, width, panel))
         durations.append(max(20, int(source.info.get("duration", 100))))
+
+    if text:
+        index = min(max(int(panel), 1), width // PANEL_WIDTH) - 1
+        left_w, right_x = index * PANEL_WIDTH, (index + 1) * PANEL_WIDTH
+        x, region = (right_x, width - right_x) if width - right_x >= left_w else (0, left_w)
+        if region > 0:
+            overlay = Image.open(io.BytesIO(
+                render_static_text(str(text), text_color, background, region)
+            )).convert("RGB")
+            for frame in frames:
+                frame.paste(overlay, (x, 0))
 
     loop = int(source.info.get("loop", 0))
     return frames, durations, loop, is_gif

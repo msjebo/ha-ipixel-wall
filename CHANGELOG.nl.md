@@ -2,6 +2,10 @@
 
 **Nederlands** | [English](CHANGELOG.md)
 
+## 0.8.2 (2026-11-26)
+- Nieuwe optie `extra.text` voor `play_media`: afbeelding op één paneel met tekst ernaast in hetzelfde beeld
+- Zon-teken `☀` in het DMD-lettertype
+
 ## 0.8.1 (2026-11-25)
 - Oplossing: afbeeldingen van een URL konden half geladen getoond worden. Het downloaden wacht nu tot het hele bestand binnen is
 

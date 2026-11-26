@@ -2,6 +2,10 @@
 
 [Nederlands](CHANGELOG.nl.md) | **English**
 
+## 0.8.2 (2026-11-26)
+- New option `extra.text` for `play_media`: image on one panel with text next to it in the same frame
+- Sun glyph `☀` in the DMD font
+
 ## 0.8.1 (2026-11-25)
 - Fix: images from a URL could be shown half loaded. The download now waits until the whole file has arrived
 
